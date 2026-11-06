@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "free_questions_used" integer DEFAULT 0 NOT NULL;

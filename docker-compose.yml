@@ -1,0 +1,31 @@
+# Lokal ishlab chiqish va O'zbekistondagi VPS uchun bir xil tuzilma.
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: advokat_pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: advokat
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-advokat}
+      POSTGRES_DB: advokat
+    ports: ['5432:5432']
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U advokat']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: advokat_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports: ['6379:6379']
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:
